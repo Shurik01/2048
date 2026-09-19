@@ -25,6 +25,7 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <!--"#FFF38FD7"-->
         <!--"#FFC56EAC"-->
-        <Setter Property="Foreground" Value="#FFC82197"/>
+        <!--"#FFC82197" -->
+        <Setter Property="Foreground" Value="#FF7D78D1"/>
     </Style>
 </ResourceDictionary>

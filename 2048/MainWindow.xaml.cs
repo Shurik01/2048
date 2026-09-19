@@ -38,6 +38,41 @@ namespace _2048
             UpdateUI();
         }
 
+        public void GameOver()
+        {
+            btn_again.Visibility = Visibility.Visible;
+            gameover.Visibility = Visibility.Visible;
+            sadcinnamoroll.Visibility = Visibility.Visible;
+            rectangle.Visibility = Visibility.Visible;
+        }
+        // Доступ к ScaleTransform (индекс 0 в TransformGroup)
+        private ScaleTransform GetScaleTransform(Border border)
+        {
+            var group = (TransformGroup)border.RenderTransform;
+            return (ScaleTransform)group.Children[0];
+        }
+
+        // Доступ к TranslateTransform (индекс 1 в TransformGroup)
+        private TranslateTransform GetTranslateTransform(Border border)
+        {
+            var group = (TransformGroup)border.RenderTransform;
+            return (TranslateTransform)group.Children[1];
+        }
+        private void AnimateMerge(Border border)
+        {
+            ScaleTransform scale = GetScaleTransform(border);
+
+            var scaleAnimation = new DoubleAnimationUsingKeyFrames
+            {
+                Duration = TimeSpan.FromMilliseconds(150)
+            };
+
+            scaleAnimation.KeyFrames.Add(new SplineDoubleKeyFrame(1.25, KeyTime.FromPercent(0.5)));
+            scaleAnimation.KeyFrames.Add(new SplineDoubleKeyFrame(1.0, KeyTime.FromPercent(1.0)));
+
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+            scale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+        }
         public void UpdateUI()
         {
             foreach (var child in grid2048.Children)
@@ -51,9 +86,8 @@ namespace _2048
                     {
                         string oldText = textBlock.Text;
                         string newText = newValue == 0 ? "" : newValue.ToString();
-
                         textBlock.Text = newText;
-                        if(borderColors.ContainsKey(newValue)) border.Background = (Brush)borderColors[newValue];
+                        if (borderColors.ContainsKey(newValue)) border.Background = (Brush)borderColors[newValue];
                         else
                         {
                             border.Background = (Brush)new BrushConverter().ConvertFromString("#FFF9F9E3")!;
@@ -67,14 +101,18 @@ namespace _2048
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.A || e.Key == Key.Left || e.Key == Key.NumPad4) {
-                if (gameMatrix2048.ToLeft()) 
+                if (gameMatrix2048.ToLeft())
                 {
                     UpdateUI();
-                    if (gameMatrix2048.SpawnNewNum()) 
+                    if (gameMatrix2048.SpawnNewNum())
                     {
                         UpdateUI();
-                    } 
-                }            
+                    }
+                }         
+                 if (gameMatrix2048.IsGameOver())
+                {
+                     GameOver();
+                }
             }
 
             if (e.Key == Key.D || e.Key == Key.Right || e.Key == Key.NumPad6)
@@ -87,6 +125,10 @@ namespace _2048
                         UpdateUI();
                     }
                 }
+                if (gameMatrix2048.IsGameOver())
+                 {
+                     GameOver();
+                 }
             }
 
             if (e.Key == Key.W || e.Key == Key.Up || e.Key == Key.NumPad8)
@@ -98,6 +140,10 @@ namespace _2048
                     {
                         UpdateUI();
                     }
+                }
+                if (gameMatrix2048.IsGameOver())
+                 {
+                     GameOver();
                 }
             }
 
@@ -111,7 +157,21 @@ namespace _2048
                         UpdateUI();
                     }
                 }
+                if (gameMatrix2048.IsGameOver())
+                 {
+                    GameOver();
+                 }
             }
+        }
+
+        private void btn_again_Click(object sender, RoutedEventArgs e)
+        {
+            gameMatrix2048.StartGame();
+            btn_again.Visibility = Visibility.Hidden;
+            gameover.Visibility = Visibility.Hidden;
+            sadcinnamoroll.Visibility = Visibility.Hidden;
+            rectangle.Visibility = Visibility.Hidden;  
+            UpdateUI();
         }
     }
 }

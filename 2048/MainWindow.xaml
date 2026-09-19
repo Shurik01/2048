@@ -1,13 +1,15 @@
-﻿<Window x:Class="_2048.MainWindow"
+﻿<!-- #FF76D6F0 -->
+<Window x:Class="_2048.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2048"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="450" Background="#FF76D6F0"
+        Title="MainWindow" Height="450" Width="450" 
         WindowStartupLocation="CenterScreen"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown" 
+        Icon="/Icon.png">
     <Grid Name="grid2048">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -21,9 +23,15 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Canvas Background="#FF76D6F0" Grid.ColumnSpan="4" Grid.RowSpan="4">
+            <Border Grid.Row="0" Grid.Column="0" Style= "{DynamicResource MyBorder}" Background="#FFD2FFFD">
+                <TextBlock Style="{DynamicResource TextBlockStyle}" Text="2" Foreground="#FF7D78D1" />
+            </Border>
+        </Canvas>
         <Border Grid.Row="0" Grid.Column="0" Style= "{DynamicResource MyBorder}" Background="#FFD2FFFD">
-            <TextBlock Style="{DynamicResource TextBlockStyle}" Text="2" Foreground="#FFC82197" />
+            <TextBlock Style="{DynamicResource TextBlockStyle}" Text="2" Foreground="#FF7D78D1" />
         </Border>
+
         <Border Grid.Row="1" Grid.Column="0" Style= "{DynamicResource MyBorder}" Background="#FFCDD9FF" >
             <TextBlock Style="{DynamicResource TextBlockStyle}" Text="64"/>
         </Border>
@@ -33,7 +41,7 @@
         <Border Grid.Row="3" Grid.Column="0" Style= "{DynamicResource MyBorder}" Background="#FFF7FFBB" >
             <TextBlock Style="{DynamicResource TextBlockStyle}" Text="128" />
         </Border>
-        <Border Grid.Row="0" Grid.Column="1" Style= "{DynamicResource MyBorder}" Background="#FFFFC3C3" >
+        <Border Grid.Row="0" Grid.Column="1" Style= "{DynamicResource MyBorder}" Background="#FFFFC5E0" >
             <TextBlock Style="{DynamicResource TextBlockStyle}" Text="256"/>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Style= "{DynamicResource MyBorder}" Background="#FF24F9E9">
@@ -69,6 +77,10 @@
         <Border Grid.Row="3" Grid.Column="3" Style= "{DynamicResource MyBorder}" >
             <TextBlock Style="{DynamicResource TextBlockStyle}"/>
         </Border>
-        
+        <Rectangle Width="450" Height="450" Grid.ColumnSpan="4" Grid.RowSpan="4" Fill="White" Opacity="0.6" Name="rectangle" Visibility="Hidden"></Rectangle>
+        <TextBlock Text="GAME OVER..." Grid.ColumnSpan="4" Margin="92,52,83,5" Foreground="#FF4B9FC8" FontSize="36" FontWeight="Bold" FontFamily="Comic Sans MS" Visibility="Hidden" Name="gameover"/>
+        <Image Source="/SadCinnamoroll.png" Grid.ColumnSpan="4" Margin="64,0,64,-15" Grid.RowSpan="3" Visibility="Hidden" Grid.Row="1" Name="sadcinnamoroll"/>
+        <Button Grid.ColumnSpan="3" Margin="110,16,10,54" Grid.Row="1" Content="PLAY AGAIN" FontFamily="Comic Sans MS" FontSize="18" FontWeight="Bold" Background="#FFFDE7FF" Foreground="#FF4B9FC8" Name="btn_again" Visibility="Hidden" Click="btn_again_Click"/>
     </Grid>
+
 </Window>

@@ -38,6 +38,19 @@ namespace _2048
 
         }
 
+        public bool IsGameOver()
+        {
+            Matrix2048 tempMatrix = new Matrix2048();
+            tempMatrix.matrix = (int[,])matrix.Clone();
+            if (tempMatrix.ToLeft() == false && tempMatrix.ToRight() == false && tempMatrix.ToUp() == false && tempMatrix.ToDown() == false)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public int GetValue(int row, int col) { 
             return matrix[row, col];
@@ -240,6 +253,7 @@ namespace _2048
         }
 
         public void StartGame() {
+            Array.Clear(matrix, 0, matrix.Length);
             SpawnNewNum();
             SpawnNewNum();
         }
