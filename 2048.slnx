@@ -1,6 +1,4 @@
 <Solution>
-  <Folder Name="/Элементы решения/">
-    <File Path="2048/Icon.ico" />
-  </Folder>
-  <Project Path="2048/2048.csproj" />
+  <Project Path="2048Avalonia/2048Avalonia/2048Avalonia.csproj" />
+  <Project Path="2048WPF/2048/2048.csproj" />
 </Solution>
