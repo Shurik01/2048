@@ -11,8 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="99848102df4b40fa795ddf6652c81754.jpg" />
-    <None Remove="f05c18138a15efd3a3d11170e13e41cd.jpg" />
     <None Remove="Icon.png" />
     <None Remove="Icon2.png" />
     <None Remove="SadCinnamoroll.png" />
@@ -23,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="99848102df4b40fa795ddf6652c81754.jpg" />
-    <Resource Include="f05c18138a15efd3a3d11170e13e41cd.jpg" />
+    <Resource Include="StartWindowImage.jpg" />
     <Resource Include="Icon.png" />
     <Resource Include="Icon2.png" />
     <Resource Include="SadCinnamoroll.png" />

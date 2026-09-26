@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path="2048/Icon.ico" />
+  </Folder>
+  <Project Path="2048/2048.csproj" />
+</Solution>

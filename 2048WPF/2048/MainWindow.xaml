@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2048"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="450" 
+        Title="MainWindow" Height="450" Width="450" MinHeight="450" MinWidth="450"
         WindowStartupLocation="CenterScreen"
         KeyDown="Window_KeyDown" 
         Icon="/Icon.png">
@@ -80,7 +80,22 @@
         <Rectangle Width="450" Height="450" Grid.ColumnSpan="4" Grid.RowSpan="4" Fill="White" Opacity="0.6" Name="rectangle" Visibility="Hidden"></Rectangle>
         <TextBlock Text="GAME OVER..." Grid.ColumnSpan="4" Margin="92,52,83,5" Foreground="#FF4B9FC8" FontSize="36" FontWeight="Bold" FontFamily="Comic Sans MS" Visibility="Hidden" Name="gameover"/>
         <Image Source="/SadCinnamoroll.png" Grid.ColumnSpan="4" Margin="64,0,64,-15" Grid.RowSpan="3" Visibility="Hidden" Grid.Row="1" Name="sadcinnamoroll"/>
-        <Button Grid.ColumnSpan="3" Margin="110,16,10,54" Grid.Row="1" Content="PLAY AGAIN" FontFamily="Comic Sans MS" FontSize="18" FontWeight="Bold" Background="#FFFDE7FF" Foreground="#FF4B9FC8" Name="btn_again" Visibility="Hidden" Click="btn_again_Click"/>
+        <Border>
+</Border>
+        <Button Cursor="Hand" 
+                Grid.ColumnSpan="3" 
+                Margin="110,16,10,54" 
+                Grid.Row="1" 
+                Content="PLAY AGAIN" 
+                FontFamily="Comic Sans MS" 
+                FontSize="18" 
+                FontWeight="Bold" 
+                Background="#FFFDE7FF" 
+                Foreground="#FF4B9FC8" 
+                Name="btn_again" 
+                Visibility="Hidden" 
+                
+                Click="btn_again_Click"/>
     </Grid>
 
 </Window>

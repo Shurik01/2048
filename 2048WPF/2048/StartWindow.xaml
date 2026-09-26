@@ -12,7 +12,7 @@
 
         <Canvas >
             <Canvas.Background>
-                <ImageBrush ImageSource="/f05c18138a15efd3a3d11170e13e41cd.jpg"/>
+                <ImageBrush ImageSource="/StartWindowImage.jpg"/>
             </Canvas.Background>
             <TextBlock TextWrapping="Wrap" Text="2048" FontSize="70" HorizontalAlignment="Left" Foreground="#FFF7B2B2" FontFamily="Gill Sans Ultra Bold" FontWeight="Bold" Canvas.Left="228" VerticalAlignment="Center"/>
             <Border Name="MyBorder" CornerRadius="10, 10, 10, 10" Height="68" Width="275" Canvas.Left="319" Canvas.Top="221" Background="#FFE9F4F6" BorderBrush="#FF7FCCD1" BorderThickness="4,4,4,4" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Center">
