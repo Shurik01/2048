@@ -1,0 +1,31 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <!-- Add Controls for Previewer Here -->
+    </Border>
+  </Design.PreviewWith>
+
+   <Style Selector="Border.MyBorder">
+        <Setter Property="Background" Value="#FFE9F4F6"/>
+        <Setter Property="BorderThickness" Value="8"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderBrush" Value="#FF76D6F0"/>
+        <Setter Property="RenderTransformOrigin" Value="50%,50%"/> <!-- В Avalonia проценты пишутся со знаком % -->
+        <Setter Property="RenderTransform">
+            <TransformGroup>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                <TranslateTransform X="0" Y="0"/>
+            </TransformGroup>
+        </Setter>
+    </Style>
+
+    <!-- Стиль для TextBlock (аналог x:Key="TextBlockStyle") -->
+    <Style Selector="TextBlock.TextBlockStyle">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#FF7D78D1"/>
+    </Style>
+</Styles>
