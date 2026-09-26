@@ -1,0 +1,78 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:_2048Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="695" d:DesignHeight="438"
+        x:Class="_2048Avalonia.Views.StartWindow"
+        x:DataType="vm:MainViewModel"
+        WindowStartupLocation="CenterScreen"
+        Width="695" Height="438"
+        Icon="/Assets/Icon.ico"
+        Title="StartWindow">
+
+     <Grid>
+        <Canvas>
+            <Canvas.Background>
+                <!-- Правильный кроссплатформенный путь к картинке -->
+                <ImageBrush Source="avares://2048Avalonia/Assets/StartWindowImage.jpg"/>
+            </Canvas.Background>
+            
+            <TextBlock TextWrapping="Wrap" Text="2048"
+                       FontSize="70"
+                       HorizontalAlignment="Left" 
+                       Foreground="#FFF7B2B2" 
+                       FontFamily="Gill Sans Ultra Bold" 
+                       FontWeight="Bold" 
+                       Canvas.Left="228" 
+                       VerticalAlignment="Center"/>
+                       
+            <Border Name="MyBorder" 
+                    CornerRadius="10" 
+                    Height="68" 
+                    Width="275" 
+                    Canvas.Left="319"
+                    Canvas.Top="221" 
+                    Background="#FFE9F4F6" 
+                    BorderBrush="#FF7FCCD1" 
+                    BorderThickness="4 4 4 4"
+                    RenderTransformOrigin="50%, 50%" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center">
+                    
+                <Button Cursor="Hand" 
+                        Content="Начать игру" 
+                        Foreground="#FFF7B2B2" 
+                        FontSize="28" 
+                        FontFamily="Gill Sans Ultra Bold" 
+                        FontWeight="Bold" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center" 
+                        Background="{x:Null}" 
+                        BorderBrush="{x:Null}" 
+                        Click="Button_Click" 
+                        Height="48"
+                        Width="255" 
+                        PointerEntered="Button_PointerEntered" 
+                        PointerExited="Button_PointerExited">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="Transparent">
+                                <!-- Обязательная привязка, чтобы текст отобразился -->
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"
+                                                  Content="{TemplateBinding Content}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+             
+                <Border.Transitions>
+                    <Transitions>
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    </Transitions>
+                </Border.Transitions>
+            </Border>
+        </Canvas>
+    </Grid>
+</Window>
