@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
+        x:Class="_2048Avalonia.Views.MainWindow"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow"
+        Width="450" Height="450"
+        Icon="/Assets/Icon.ico">
+    <Grid Name="grid2048">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Canvas Background="#FF76D6F0" Grid.ColumnSpan="4" Grid.RowSpan="4"/>
+
+        <!-- Ячейки игровой сетки -->
+        <Border Grid.Row="0" Grid.Column="0" Classes="MyBorder"><TextBlock Classes="TextBlockStyle" Text="2"/></Border>
+        <Border Grid.Row="1" Grid.Column="0" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="2" Grid.Column="0" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="3" Grid.Column="0" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="0" Grid.Column="1" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="1" Grid.Column="1" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="2" Grid.Column="1" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="3" Grid.Column="1" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+
+        <Border Grid.Row="0" Grid.Column="2" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="1" Grid.Column="2" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="2" Grid.Column="2" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="3" Grid.Column="2" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+
+        <Border Grid.Row="0" Grid.Column="3" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="1" Grid.Column="3" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="2" Grid.Column="3" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+        <Border Grid.Row="3" Grid.Column="3" Classes="MyBorder"><TextBlock Classes="TextBlockStyle"/></Border>
+
+        <!-- Overlay Game Over -->
+        <Rectangle Width="450" Height="450" Grid.ColumnSpan="4" Grid.RowSpan="4" Fill="White" Opacity="0.6" Name="rectangle" IsVisible="False"/>
+        <TextBlock Text="GAME OVER..." Grid.ColumnSpan="4" Margin="92,52,83,5" Foreground="#FF4B9FC8" FontSize="36" FontWeight="Bold" FontFamily="Comic Sans MS" IsVisible="False" Name="gameover"/>
+        <Image Source="avares://2048Avalonia/Assets/SadCinnamoroll.png" Grid.ColumnSpan="4" Margin="64,0,64,-15" Grid.RowSpan="3" IsVisible="False" Grid.Row="1" Name="sadcinnamoroll"/>
+        <Button Width="250" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Content="PLAY AGAIN" FontFamily="Comic Sans MS" FontSize="18" FontWeight="Bold" Background="#FFFDE7FF" Foreground="#FF4B9FC8" Name="btn_again" 
+                IsVisible="False" Click="btn_again_Click"/>
+    </Grid>
+</Window>
