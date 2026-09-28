@@ -12,35 +12,65 @@
         Background="#fad2f5">
 
     <!-- Главный контейнер -->
-    <Grid Margin="10">
+    <Grid Margin="10, 20, 10, 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/> <!-- Панель со счётом и кнопкой -->
             <RowDefinition Height="*"/>    <!-- Игровое поле -->
         </Grid.RowDefinitions>
 
         <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
-        <Grid Grid.Row="0" Margin="15,0,20,30">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
+<Grid Grid.Row="0" Margin="15,15,15,15">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    
+    <!-- Расстояние между колонками (работает в Avalonia 11+) -->
+    <!-- Если у вас older version, используйте Margin="0,0,10,0" у Border'ов вместо этого -->
+    <Grid.ColumnSpacing>10</Grid.ColumnSpacing>
 
-            <!-- Блок со счётом -->
-            <Border Grid.Column="0" Background="#FF76D6F0"  CornerRadius="6" Padding="40,10" HorizontalAlignment="Left">
-                <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock Name="txtScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Border>
+    <!-- Блок со счётом -->
+    <Border Grid.Column="0" 
+            Background="#FF76D6F0"  
+            CornerRadius="6" 
+            Padding="15,10" 
+            HorizontalAlignment="Stretch">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Name="curScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Border>
 
-            <!-- Кнопка новой игры -->
-            <!--Click="btnNewGame_Click"-->
-            <Button Grid.Column="1" Name="btnNewGame" Content="New Game"
-                    Background="#FF76D6F0"  Foreground="#F9F6F2"
-                    FontWeight="Bold" FontSize="19"
-                    Padding="30,20" CornerRadius="6"
-                    VerticalAlignment="Center"/>
-        </Grid>
+    <!-- Блок с лучшим счётом -->
+    <Border Grid.Column="1" 
+            Background="#FF76D6F0"  
+            CornerRadius="6" 
+            Padding="15,10" 
+            HorizontalAlignment="Stretch">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- Сократил текст до "BEST", чтобы блок был компактнее и симметричнее -->
+            <TextBlock Text="BEST" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Name="bestScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Border>
+
+    <!-- Кнопка новой игры -->
+    <Button Grid.Column="2" 
+            Click="btn_again_Click"
+            Name="btnNewGame" 
+            Content="New Game"
+            Background="#FF76D6F0"  
+            Foreground="White"
+            FontWeight="Bold" 
+            FontSize="16"
+            Padding="20,10" 
+            CornerRadius="6"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch"/> <!-- Stretch выравнивает высоту кнопки по высоте блоков счёта -->
+</Grid>
 
         <!-- 2. ИГРОВОЕ ПОЛЕ (Фиксированный размер для простоты расчёта координат Canvas) -->
         <Border Grid.Row="1" Background="#FF76D6F0"  CornerRadius="6" 
