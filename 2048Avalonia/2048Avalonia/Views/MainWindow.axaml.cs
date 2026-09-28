@@ -43,10 +43,7 @@ namespace _2048Avalonia.Views
 
         public void GameOver()
         {
-            btn_again.IsVisible = true;
-            gameover.IsVisible = true;
-            sadcinnamoroll.IsVisible = true;
-            rectangle.IsVisible = true;
+            gameOverOverlay.IsVisible = true;
         }
 
         public void UpdateUI()
@@ -122,10 +119,7 @@ namespace _2048Avalonia.Views
         private void btn_again_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             gameMatrix2048.StartGame();
-            btn_again.IsVisible = false;
-            gameover.IsVisible = false;
-            sadcinnamoroll.IsVisible = false;
-            rectangle.IsVisible = false;
+            gameOverOverlay.IsVisible = false;
             UpdateUI();
         }
     }
