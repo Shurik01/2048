@@ -19,7 +19,6 @@
         </Grid.RowDefinitions>
 
         <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
-        <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
 <Grid Grid.Row="0" Margin="15,15,15,15">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
@@ -27,8 +26,7 @@
         <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
     
-    <!-- Расстояние между колонками (работает в Avalonia 11+) -->
-    <!-- Если у вас older version, используйте Margin="0,0,10,0" у Border'ов вместо этого -->
+   
     <Grid.ColumnSpacing>10</Grid.ColumnSpacing>
 
     <!-- Блок со счётом -->
@@ -50,8 +48,7 @@
             Padding="15,10" 
             HorizontalAlignment="Stretch">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <!-- Сократил текст до "BEST", чтобы блок был компактнее и симметричнее -->
-            <TextBlock Text="BEST" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Text="BEST SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
             <TextBlock Name="bestScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
         </StackPanel>
     </Border>
@@ -69,7 +66,7 @@
             CornerRadius="6"
             VerticalContentAlignment="Center"
             HorizontalAlignment="Center"
-            VerticalAlignment="Stretch"/> <!-- Stretch выравнивает высоту кнопки по высоте блоков счёта -->
+            VerticalAlignment="Stretch"/>
 </Grid>
 
         <!-- 2. ИГРОВОЕ ПОЛЕ (Фиксированный размер для простоты расчёта координат Canvas) -->
@@ -109,8 +106,7 @@
                     <Border Grid.Row="3" Grid.Column="3" Classes="MyBorder"/>
                 </Grid>
 
-                <!-- 2.2. CANVAS ДЛЯ ПЛИТОК (Лежит ПОВЕРХ фоновой сетки благодаря порядку в XAML) -->
-                <!-- Сюда из C# кода мы будем добавлять Border'ы с цифрами -->
+                <!-- 2.2. CANVAS ДЛЯ ПЛИТОК -->
                 <Canvas Name="canvasTiles"/>
                 
             </Grid>
