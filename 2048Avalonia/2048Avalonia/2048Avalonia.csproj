@@ -7,6 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
 	<UseAppHost>true</UseAppHost>
+	<ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
 	
@@ -14,6 +15,12 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+	
+
+  <ItemGroup>
+    <Content Include="Assets\Icon.ico" />
   </ItemGroup>
 
   <ItemGroup>

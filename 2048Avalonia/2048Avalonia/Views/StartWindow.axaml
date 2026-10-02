@@ -22,7 +22,7 @@
                        FontSize="70"
                        HorizontalAlignment="Left" 
                        Foreground="#FFF7B2B2" 
-                       FontFamily="Gill Sans Ultra Bold" 
+                       FontFamily="Gill Sans" 
                        FontWeight="Bold" 
                        Canvas.Left="228" 
                        VerticalAlignment="Center"/>

@@ -4,6 +4,11 @@ using System.Text;
 
 namespace _2048Avalonia
 {
+    public struct MoveResult
+    {
+        public bool IsMoved {get; set;}
+        public int Score { get; set; }
+    }
     // шанс выпадения двойки - 90%, четверки - 10%
     class Matrix2048
     {
@@ -47,7 +52,7 @@ namespace _2048Avalonia
         {
             Matrix2048 tempMatrix = new Matrix2048();
             tempMatrix.matrix = (int[,])matrix.Clone();
-            if (tempMatrix.ToLeft() == false && tempMatrix.ToRight() == false && tempMatrix.ToUp() == false && tempMatrix.ToDown() == false)
+            if (tempMatrix.ToLeft().IsMoved == false && tempMatrix.ToRight().IsMoved == false && tempMatrix.ToUp().IsMoved == false && tempMatrix.ToDown().IsMoved == false)
             {
                 return true;
             }
@@ -63,9 +68,11 @@ namespace _2048Avalonia
         }
 
 
-        public bool ToLeft()
+        public MoveResult ToLeft()
         {
-            bool isMoved = false;
+            MoveResult moveResult = new MoveResult();
+            moveResult.IsMoved = false;
+            int score = 0;
             List<int> row = new List<int>();
             for (int r = 0; r < 4; r++)
             {
@@ -83,7 +90,7 @@ namespace _2048Avalonia
                     if (i < row.Count - 1 && row[i] == row[i + 1])
                     {
                         collapsedRow.Add(row[i] * 2);
-                        // анимация слияния
+                        score += row[i] * 2;
                         i++;
                     }
                     else
@@ -102,20 +109,23 @@ namespace _2048Avalonia
 
                     if (matrix[r, c] != newValue)
                     {
-                        isMoved = true;
+                        moveResult.IsMoved = true;
                     }
 
                     matrix[r, c] = newValue;
 
                 }
             }
-            return isMoved;
+            moveResult.Score = score;
+            return moveResult;
         }
 
 
-        public bool ToRight()
+        public MoveResult ToRight()
         {
-            bool isMoved = false;
+            MoveResult moveResult = new MoveResult();
+            moveResult.IsMoved = false;
+            int score = 0;
             List<int> row = new List<int>();
             for (int r = 0; r < 4; r++)
             {
@@ -133,7 +143,9 @@ namespace _2048Avalonia
                     if (i > 0 && row[i] == row[i - 1])
                     {
                         collapsedRow.Add(row[i] * 2);
+                        score += row[i] * 2;
                         i--;
+                      
                     }
                     else
                     {
@@ -153,19 +165,22 @@ namespace _2048Avalonia
 
                     if (matrix[r, c] != newValue)
                     {
-                        isMoved = true;
+                        moveResult.IsMoved = true;
                     }
 
                     matrix[r, c] = newValue;
                 }
             }
-            return isMoved;
+            moveResult.Score= score;
+            return moveResult;
         }
 
 
-        public bool ToUp()
+        public MoveResult ToUp()
         {
-            bool isMoved = false;
+            MoveResult moveResult = new MoveResult();
+            moveResult.IsMoved = false;
+            int score = 0;
             List<int> col = new List<int>();
             for (int c = 0; c < 4; c++)
             {
@@ -183,6 +198,7 @@ namespace _2048Avalonia
                     if (i < col.Count - 1 && col[i] == col[i + 1])
                     {
                         collapsedCol.Add(col[i] * 2);
+                        score += col[i] * 2;
                         i++;
                     }
                     else
@@ -201,18 +217,21 @@ namespace _2048Avalonia
 
                     if (matrix[r, c] != newValue)
                     {
-                        isMoved = true;
+                        moveResult.IsMoved = true;
                     }
 
                     matrix[r, c] = newValue;
                 }
             }
-            return isMoved;
+            moveResult.Score = score;
+            return moveResult;
         }
 
-        public bool ToDown()
+        public MoveResult ToDown()
         {
-            bool isMoved = false;
+            MoveResult moveResult = new MoveResult();
+            moveResult.IsMoved = false;
+            int score = 0;
             List<int> col = new List<int>();
             for (int c = 0; c < 4; c++)
             {
@@ -230,6 +249,7 @@ namespace _2048Avalonia
                     if (i > 0 && col[i] == col[i - 1])
                     {
                         collapsedCol.Add(col[i] * 2);
+                        score += col[i] * 2;
                         i--;
                     }
                     else
@@ -250,13 +270,14 @@ namespace _2048Avalonia
 
                     if (matrix[r, c] != newValue)
                     {
-                        isMoved = true;
+                        moveResult.IsMoved = true;
                     }
 
                     matrix[r, c] = newValue;
                 }
             }
-            return isMoved;
+            moveResult.Score = score;
+            return moveResult;
         }
 
         public void StartGame()
