@@ -45,13 +45,23 @@ namespace _2048Avalonia.Views
             // Подписка на событие клавиатуры в Avalonia
             KeyDown += Window_KeyDown;
 
+            _cellSize = 97.0;
             gameMatrix2048.StartGame();
+            SaveMatrix();
+
+            _curScore = 0;
+            _bestScore = ScoreFileManager.LoadBestScore();
+
             UpdateUI();
         }
 
-        private static IBrush ColorBrush(string hex)
+        private static IBrush ColorBrush(string hex) => SolidColorBrush.Parse(hex);
+
+        private void SaveMatrix()
         {
-            return SolidColorBrush.Parse(hex);
+            for (int r = 0; r < 4; r++)
+                for (int c = 0; c < 4; c++)
+                    _previousMatrix[r, c] = gameMatrix2048.GetValue(r, c);
         }
 
         public void GameOver()
