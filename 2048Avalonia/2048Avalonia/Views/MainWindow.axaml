@@ -8,126 +8,131 @@
         Title="2048"
         Width="450" Height="560"
         MinHeight="540"
+        MinWidth="450"
         Icon="/Assets/Icon.ico"
         Background="#fad2f5">
+    <Viewbox Stretch="Uniform">
+        <!-- Главный контейнер -->
+        <Grid Margin="10, 0, 10, 20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Панель со счётом и кнопкой -->
+                <RowDefinition Height="*"/>    <!-- Игровое поле -->
+            </Grid.RowDefinitions>
 
-    <!-- Главный контейнер -->
-    <Grid Margin="10, 20, 10, 10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/> <!-- Панель со счётом и кнопкой -->
-            <RowDefinition Height="*"/>    <!-- Игровое поле -->
-        </Grid.RowDefinitions>
-
-        <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
-<Grid Grid.Row="0" Margin="15,15,15,15">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-    </Grid.ColumnDefinitions>
+            <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
+    <Grid Grid.Row="0" Margin="15,15,15,15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
     
    
-    <Grid.ColumnSpacing>10</Grid.ColumnSpacing>
+        <Grid.ColumnSpacing>10</Grid.ColumnSpacing>
 
-    <!-- Блок со счётом -->
-    <Border Grid.Column="0" 
-            Background="#FF76D6F0"  
-            CornerRadius="6" 
-            Padding="15,10" 
-            HorizontalAlignment="Stretch">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Name="curScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Border>
-
-    <!-- Блок с лучшим счётом -->
-    <Border Grid.Column="1" 
-            Background="#FF76D6F0"  
-            CornerRadius="6" 
-            Padding="15,10" 
-            HorizontalAlignment="Stretch">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="BEST SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Name="bestScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Border>
-
-    <!-- Кнопка новой игры -->
-    <Button Grid.Column="2" 
-            Click="btn_again_Click"
-            Name="btnNewGame" 
-            Content="New Game"
-            Background="#FF76D6F0"  
-            Foreground="White"
-            FontWeight="Bold" 
-            FontSize="16"
-            Padding="20,10" 
-            CornerRadius="6"
-            VerticalContentAlignment="Center"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Stretch"/>
-</Grid>
-
-        <!-- 2. ИГРОВОЕ ПОЛЕ (Фиксированный размер для простоты расчёта координат Canvas) -->
-        <Border Grid.Row="1" Background="#FF76D6F0"  CornerRadius="6" 
-                Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top">
-            
-            <Grid Name="grid2048" Margin="6">
-                
-                <!-- 2.1. ФОНОВАЯ СЕТКА (16 пустых ячеек, лежат на заднем плане) -->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Row 0 -->
-                    <Border Grid.Row="0" Grid.Column="0" Classes="MyBorder"/>
-                    <Border Grid.Row="0" Grid.Column="1" Classes="MyBorder"/>
-                    <Border Grid.Row="0" Grid.Column="2" Classes="MyBorder"/>
-                    <Border Grid.Row="0" Grid.Column="3" Classes="MyBorder"/>
-                    <!-- Row 1 -->
-                    <Border Grid.Row="1" Grid.Column="0" Classes="MyBorder"/>
-                    <Border Grid.Row="1" Grid.Column="1" Classes="MyBorder"/>
-                    <Border Grid.Row="1" Grid.Column="2" Classes="MyBorder"/>
-                    <Border Grid.Row="1" Grid.Column="3" Classes="MyBorder"/>
-                    <!-- Row 2 -->
-                    <Border Grid.Row="2" Grid.Column="0" Classes="MyBorder"/>
-                    <Border Grid.Row="2" Grid.Column="1" Classes="MyBorder"/>
-                    <Border Grid.Row="2" Grid.Column="2" Classes="MyBorder"/>
-                    <Border Grid.Row="2" Grid.Column="3" Classes="MyBorder"/>
-                    <!-- Row 3 -->
-                    <Border Grid.Row="3" Grid.Column="0" Classes="MyBorder"/>
-                    <Border Grid.Row="3" Grid.Column="1" Classes="MyBorder"/>
-                    <Border Grid.Row="3" Grid.Column="2" Classes="MyBorder"/>
-                    <Border Grid.Row="3" Grid.Column="3" Classes="MyBorder"/>
-                </Grid>
-
-                <!-- 2.2. CANVAS ДЛЯ ПЛИТОК -->
-                <Canvas Name="canvasTiles"/>
-                
-            </Grid>
+        <!-- Блок со счётом -->
+        <Border Grid.Column="0" 
+                Background="#FF76D6F0"  
+                CornerRadius="6" 
+                Padding="15,10" 
+                HorizontalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+                <TextBlock Name="curScore"  Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+            </StackPanel>
         </Border>
 
-        <!-- 3. OVERLAY GAME OVER (Перекрывает только игровое поле) -->
-        <Grid Grid.Row="1" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" 
-              IsVisible="False" Name="gameOverOverlay">
-            <Rectangle Fill="White" Opacity="0.7"/>
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="1">
-                <TextBlock Text="GAME OVER" Foreground="#FF4B9FC8" FontSize="36" FontWeight="Bold" FontFamily="Comic Sans MS" HorizontalAlignment="Center"/>
-                <Image Source="avares://2048Avalonia/Assets/SadCinnamoroll.png" Width="250" Height="250" HorizontalAlignment="Center"/>
-                <Button Name="btn_again" Content="PLAY AGAIN" 
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Center"
-                        Click="btn_again_Click"
-                        FontFamily="Comic Sans MS" FontSize="20" FontWeight="Bold" 
-                        Background="#FFFDE7FF" Foreground="#FF4B9FC8"
-                        Width="200" Padding="10" CornerRadius="5"/>
+        <!-- Блок с лучшим счётом -->
+        <Border Grid.Column="1" 
+                Background="#FF76D6F0"  
+                CornerRadius="6" 
+                Padding="15,10" 
+                HorizontalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="BEST SCORE" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+                <TextBlock Name="bestScore" Text="0" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
             </StackPanel>
-        </Grid>
+        </Border>
 
+        <!-- Кнопка новой игры -->
+        <Button Grid.Column="2" 
+                Focusable="False"
+                Click="btn_again_Click"
+                Name="btnNewGame" 
+                Content="New Game"
+                Background="#FF76D6F0"  
+                Foreground="White"
+                FontWeight="Bold" 
+                FontSize="16"
+                Padding="20,10" 
+                CornerRadius="6"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"/>
     </Grid>
+
+            <!-- 2. ИГРОВОЕ ПОЛЕ (Фиксированный размер для простоты расчёта координат Canvas) -->
+            <Border Grid.Row="1" Background="#FF76D6F0"  CornerRadius="6" 
+                    Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top">
+            
+                <Grid Name="grid2048" Margin="6">
+                
+                    <!-- 2.1. ФОНОВАЯ СЕТКА (16 пустых ячеек, лежат на заднем плане) -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Row 0 -->
+                        <Border Grid.Row="0" Grid.Column="0" Classes="MyBorder"/>
+                        <Border Grid.Row="0" Grid.Column="1" Classes="MyBorder"/>
+                        <Border Grid.Row="0" Grid.Column="2" Classes="MyBorder"/>
+                        <Border Grid.Row="0" Grid.Column="3" Classes="MyBorder"/>
+                        <!-- Row 1 -->
+                        <Border Grid.Row="1" Grid.Column="0" Classes="MyBorder"/>
+                        <Border Grid.Row="1" Grid.Column="1" Classes="MyBorder"/>
+                        <Border Grid.Row="1" Grid.Column="2" Classes="MyBorder"/>
+                        <Border Grid.Row="1" Grid.Column="3" Classes="MyBorder"/>
+                        <!-- Row 2 -->
+                        <Border Grid.Row="2" Grid.Column="0" Classes="MyBorder"/>
+                        <Border Grid.Row="2" Grid.Column="1" Classes="MyBorder"/>
+                        <Border Grid.Row="2" Grid.Column="2" Classes="MyBorder"/>
+                        <Border Grid.Row="2" Grid.Column="3" Classes="MyBorder"/>
+                        <!-- Row 3 -->
+                        <Border Grid.Row="3" Grid.Column="0" Classes="MyBorder"/>
+                        <Border Grid.Row="3" Grid.Column="1" Classes="MyBorder"/>
+                        <Border Grid.Row="3" Grid.Column="2" Classes="MyBorder"/>
+                        <Border Grid.Row="3" Grid.Column="3" Classes="MyBorder"/>
+                    </Grid>
+
+                    <!-- 2.2. CANVAS ДЛЯ ПЛИТОК -->
+                    <Canvas Name="canvasTiles"/>
+                
+                </Grid>
+            </Border>
+
+            <!-- 3. OVERLAY GAME OVER (Перекрывает только игровое поле) -->
+            <Grid Grid.Row="1" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                  IsVisible="False" Name="gameOverOverlay">
+                <Rectangle Fill="White" Opacity="0.7"/>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="1">
+                    <TextBlock Text="GAME OVER..." Foreground="#FF4B9FC8" FontSize="36" FontWeight="Bold" FontFamily="Comic Sans MS" HorizontalAlignment="Center"/>
+                    <Image Source="avares://2048Avalonia/Assets/SadCinnamoroll.png" Width="250" Height="180" HorizontalAlignment="Center"/>
+                    <Button Name="btn_again" Content="PLAY AGAIN"
+                            HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Click="btn_again_Click"
+                            FontFamily="Comic Sans MS" FontSize="25" FontWeight="Bold" 
+                            Background="#FFFDE7FF" Foreground="#FF4B9FC8"
+                            BorderBrush="#FF4B9FC8"
+                            BorderThickness="4"
+                            Width="220" Padding="5" CornerRadius="10" Margin="0,15,0,0"/>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Viewbox>
 </Window>
