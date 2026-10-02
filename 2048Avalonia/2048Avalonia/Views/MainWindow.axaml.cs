@@ -9,6 +9,16 @@ namespace _2048Avalonia.Views
 {
     public partial class MainWindow : Window
     {
+        private double _cellSize;
+        private bool _isAnimating = false;
+        private readonly int[,] _previousMatrix = new int[4, 4];
+
+        private int _curScore;
+        private int _bestScore;
+
+
+        private readonly HashSet<(int row, int col)> _slideDestinations = new HashSet<(int, int)>();
+        private readonly HashSet<(int row, int col)> _mergeDestinations = new HashSet<(int, int)>();
         private readonly Dictionary<int, IBrush> borderColors = new Dictionary<int, IBrush>()
         {
             { 0, ColorBrush("#FF76D6F0") },
@@ -24,6 +34,8 @@ namespace _2048Avalonia.Views
         };
 
         private readonly Matrix2048 gameMatrix2048 = new Matrix2048();
+        private class VisualTile { public int Row, Col, Value; public Border Ui; }
+        private readonly List<VisualTile> _activeTiles = new List<VisualTile>();
 
         public MainWindow()
         {
