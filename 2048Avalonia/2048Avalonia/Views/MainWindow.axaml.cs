@@ -23,7 +23,6 @@ namespace _2048Avalonia.Views
         private int _curScore;
         private int _bestScore;
 
-
         private readonly HashSet<(int row, int col)> _slideDestinations = new HashSet<(int, int)>();
         private readonly HashSet<(int row, int col)> _mergeDestinations = new HashSet<(int, int)>();
 
@@ -43,6 +42,7 @@ namespace _2048Avalonia.Views
         };
 
         private readonly Matrix2048 gameMatrix2048 = new Matrix2048();
+
         private class VisualTile { public int Row, Col, Value; public Border Ui; }
         private readonly List<VisualTile> _activeTiles = new List<VisualTile>();
 
@@ -50,7 +50,6 @@ namespace _2048Avalonia.Views
         {
             InitializeComponent();
 
-            // Подписка на событие клавиатуры в Avalonia
             KeyDown += Window_KeyDown;
 
             _cellSize = 97.0;
@@ -91,7 +90,7 @@ namespace _2048Avalonia.Views
                     Foreground = value <= 512
                         ? new SolidColorBrush(Color.Parse("#FF7D78D1"))
                         : Brushes.White
-        }
+                }
             };
             Canvas.SetLeft(border, col * _cellSize + 3);
             Canvas.SetTop(border, row * _cellSize + 3);
@@ -100,78 +99,119 @@ namespace _2048Avalonia.Views
 
         public void UpdateUI()
         {
-            foreach (var child in grid2048.Children)
+            canvasTiles.Children.Clear();
+            _activeTiles.Clear();
+
+            for (int row = 0; row < 4; row++)
             {
-                if (child is Border border)
+                for (int col = 0; col < 4; col++)
                 {
-                    int row = Grid.GetRow(border);
-                    int col = Grid.GetColumn(border);
-                    int newValue = gameMatrix2048.GetValue(row, col);
-
-                    if (border.Child is TextBlock textBlock)
+                    int currentValue = gameMatrix2048.GetValue(row, col);
+                    if (currentValue > 0)
                     {
-                        textBlock.Text = newValue == 0 ? "" : newValue.ToString();
+                        var tile = CreateTile(row, col, currentValue);
+                        canvasTiles.Children.Add(tile.Ui);
+                        _activeTiles.Add(tile);
 
-                        if (borderColors.TryGetValue(newValue, out var brush))
+                        if (_mergeDestinations.Contains((row, col)))
                         {
-                            border.Background = brush;
+                            AnimatePulseAsync(tile.Ui);
                         }
-                        else
+                        else if (_slideDestinations.Contains((row, col)))
                         {
-                            border.Background = ColorBrush("#FFF9F9E3");
+                            // плитка уже проехала — просто рисуем её на новом месте
+                        }
+                        else if (_previousMatrix[row, col] == 0)
+                        {
+                            AnimatePopAsync(tile.Ui);
                         }
                     }
                 }
             }
+            SaveMatrix();
+
+            // --- Счёт ---
+            curScore.Text = _curScore.ToString();
+
+            if (_curScore > _bestScore)
+            {
+                _bestScore = _curScore;
+                ScoreFileManager.SaveBestScore(_bestScore);
+            }
+
+            bestScore.Text = _bestScore.ToString();
         }
 
-        private void Window_KeyDown(object? sender, KeyEventArgs e)
+        private async void Window_KeyDown(object? sender, KeyEventArgs e)
         {
-            bool moved = false;
+            if (_isAnimating) return;
+
+            MoveResult moveResult = new MoveResult();
+            moveResult.IsMoved = false;
+            Key pressedKey = e.Key;
 
             switch (e.Key)
             {
-                case Key.A:
-                case Key.Left:
-                case Key.NumPad4:
-                    moved = gameMatrix2048.ToLeft();
-                    break;
-                case Key.D:
-                case Key.Right:
-                case Key.NumPad6:
-                    moved = gameMatrix2048.ToRight();
-                    break;
-                case Key.W:
-                case Key.Up:
-                case Key.NumPad8:
-                    moved = gameMatrix2048.ToUp();
-                    break;
-                case Key.S:
-                case Key.Down:
-                case Key.NumPad2:
-                    moved = gameMatrix2048.ToDown();
-                    break;
+                case Key.A or Key.Left or Key.NumPad4: moveResult = gameMatrix2048.ToLeft(); break;
+                case Key.D or Key.Right or Key.NumPad6: moveResult = gameMatrix2048.ToRight(); break;
+                case Key.W or Key.Up or Key.NumPad8: moveResult = gameMatrix2048.ToUp(); break;
+                case Key.S or Key.Down or Key.NumPad2: moveResult = gameMatrix2048.ToDown(); break;
+                default: return;
             }
 
-            if (moved)
+            if (!moveResult.IsMoved) return;
+
+            _curScore += moveResult.Score;
+
+            _isAnimating = true;
+
+            _slideDestinations.Clear();
+            _mergeDestinations.Clear();
+
+            // 1. Вычисляем ходы на основе СТАРОЙ матрицы
+            var moves = CalculateMoves(_previousMatrix, pressedKey);
+
+            // 2. Запускаем анимацию скольжения для существующих плиток
+            var animationTasks = new List<Task>();
+            foreach (var move in moves)
             {
-                UpdateUI();
-                if (gameMatrix2048.SpawnNewNum())
+                if (move.IsMerged)
+                    _mergeDestinations.Add((move.ToRow, move.ToCol));
+                else
+                    _slideDestinations.Add((move.ToRow, move.ToCol));
+
+                var tile = _activeTiles.FirstOrDefault(t => t.Row == move.FromRow && t.Col == move.FromCol);
+                if (tile != null)
                 {
-                    UpdateUI();
+                    animationTasks.Add(AnimateMoveAsync(tile.Ui, move.ToRow, move.ToCol));
                 }
             }
 
+            // 3. Ждём завершения скольжения
+            await Task.WhenAll(animationTasks);
+
+            // 4. Добавляем новую случайную плитку в логику
+            gameMatrix2048.SpawnNewNum();
+
+            // 5. Перерисовываем UI: старые плитки удалятся, на их месте появятся новые
+            //    с анимацией Pop (новая плитка) или Pulse (слияние)
+            UpdateUI();
+
             if (gameMatrix2048.IsGameOver())
-            {
                 GameOver();
-            }
+
+            _slideDestinations.Clear();
+            _mergeDestinations.Clear();
+
+            _isAnimating = false;
         }
 
         private void btn_again_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             gameMatrix2048.StartGame();
             gameOverOverlay.IsVisible = false;
+            _curScore = 0;
+            SaveMatrix();
             UpdateUI();
         }
 
