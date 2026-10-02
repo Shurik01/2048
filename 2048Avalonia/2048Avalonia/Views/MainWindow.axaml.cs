@@ -174,5 +174,156 @@ namespace _2048Avalonia.Views
             gameOverOverlay.IsVisible = false;
             UpdateUI();
         }
+
+        // --- АЛГОРИТМ ВЫЧИСЛЕНИЯ ХОДОВ ---
+        private class MoveInfo
+        {
+            public int FromRow, FromCol, ToRow, ToCol;
+            public bool IsMerged;
+        }
+
+        private List<MoveInfo> CalculateMoves(int[,] oldMatrix, Key pressedKey)
+        {
+            var moves = new List<MoveInfo>();
+            bool isHorizontal = pressedKey is Key.Left or Key.Right or Key.A or Key.D or Key.NumPad4 or Key.NumPad6;
+            bool isReverse = pressedKey is Key.Right or Key.D or Key.NumPad6 or Key.Down or Key.S or Key.NumPad2;
+
+            for (int i = 0; i < 4; i++)
+            {
+                int[] line = new int[4];
+                for (int j = 0; j < 4; j++)
+                {
+                    int r = isHorizontal ? i : (isReverse ? 3 - j : j);
+                    int c = isHorizontal ? (isReverse ? 3 - j : j) : i;
+                    line[j] = oldMatrix[r, c];
+                }
+
+                int[] result = new int[4];
+                bool[] merged = new bool[4];
+                int targetPos = 0;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    if (line[j] == 0) continue;
+
+                    if (targetPos > 0 && result[targetPos - 1] == line[j] && !merged[targetPos - 1])
+                    {
+                        // Слияние
+                        result[targetPos - 1] *= 2;
+                        merged[targetPos - 1] = true;
+
+                        int fromR = isHorizontal ? i : (isReverse ? 3 - j : j);
+                        int fromC = isHorizontal ? (isReverse ? 3 - j : j) : i;
+                        int toR = isHorizontal ? i : (isReverse ? 3 - (targetPos - 1) : (targetPos - 1));
+                        int toC = isHorizontal ? (isReverse ? 3 - (targetPos - 1) : (targetPos - 1)) : i;
+
+                        moves.Add(new MoveInfo { FromRow = fromR, FromCol = fromC, ToRow = toR, ToCol = toC, IsMerged = true });
+                    }
+                    else
+                    {
+                        // Просто перемещение
+                        result[targetPos] = line[j];
+
+                        int fromR = isHorizontal ? i : (isReverse ? 3 - j : j);
+                        int fromC = isHorizontal ? (isReverse ? 3 - j : j) : i;
+                        int toR = isHorizontal ? i : (isReverse ? 3 - targetPos : targetPos);
+                        int toC = isHorizontal ? (isReverse ? 3 - targetPos : targetPos) : i;
+
+                        moves.Add(new MoveInfo { FromRow = fromR, FromCol = fromC, ToRow = toR, ToCol = toC, IsMerged = false });
+                        targetPos++;
+                    }
+                }
+            }
+            return moves;
+        }
+
+        // --- АНИМАЦИИ ---
+
+        private async Task AnimateMoveAsync(Border border, int toRow, int toCol)
+        {
+            double currentLeft = Canvas.GetLeft(border);
+            double currentTop = Canvas.GetTop(border);
+            double targetLeft = toCol * _cellSize + 3;
+            double targetTop = toRow * _cellSize + 3;
+
+            var animation = new Animation
+            {
+                Duration = TimeSpan.FromMilliseconds(120),
+                Easing = new CubicEaseOut(),
+                FillMode = FillMode.Forward,
+                Children =
+                {
+                    new KeyFrame { Cue = new Cue(0d), Setters = {
+                        new Setter(Canvas.LeftProperty, currentLeft),
+                        new Setter(Canvas.TopProperty, currentTop)
+                    }},
+                    new KeyFrame { Cue = new Cue(1d), Setters = {
+                        new Setter(Canvas.LeftProperty, targetLeft),
+                        new Setter(Canvas.TopProperty, targetTop)
+                    }}
+                }
+            };
+            await animation.RunAsync(border, CancellationToken.None);
+        }
+
+        private async void AnimatePopAsync(Border border)
+        {
+            var scale = new ScaleTransform(0, 0);
+            border.RenderTransform = scale;
+            border.RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
+
+            var animation = new Animation
+            {
+                Duration = TimeSpan.FromMilliseconds(200),
+                Easing = new BackEaseOut(),
+                FillMode = FillMode.Forward,
+                Children =
+                {
+                    new KeyFrame { Cue = new Cue(0d), Setters = {
+                        new Setter(ScaleTransform.ScaleXProperty, 0.0),
+                        new Setter(ScaleTransform.ScaleYProperty, 0.0)
+                    }},
+                    new KeyFrame { Cue = new Cue(1d), Setters = {
+                        new Setter(ScaleTransform.ScaleXProperty, 1.0),
+                        new Setter(ScaleTransform.ScaleYProperty, 1.0)
+                    }}
+                }
+            };
+
+            await animation.RunAsync(border, CancellationToken.None);
+            border.RenderTransform = null;
+        }
+
+        private async void AnimatePulseAsync(Border border)
+        {
+            var scale = new ScaleTransform(1, 1);
+            border.RenderTransform = scale;
+            border.RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
+
+            var animation = new Animation
+            {
+                Duration = TimeSpan.FromMilliseconds(200),
+                Easing = new CubicEaseOut(),
+                FillMode = FillMode.Forward,
+                Children =
+                {
+                    new KeyFrame { Cue = new Cue(0.0), Setters = {
+                        new Setter(ScaleTransform.ScaleXProperty, 1.0),
+                        new Setter(ScaleTransform.ScaleYProperty, 1.0)
+                    }},
+                    new KeyFrame { Cue = new Cue(0.5), Setters = {
+                        new Setter(ScaleTransform.ScaleXProperty, 1.2),
+                        new Setter(ScaleTransform.ScaleYProperty, 1.2)
+                    }},
+                    new KeyFrame { Cue = new Cue(1.0), Setters = {
+                        new Setter(ScaleTransform.ScaleXProperty, 1.0),
+                        new Setter(ScaleTransform.ScaleYProperty, 1.0)
+                    }}
+                }
+            };
+
+            await animation.RunAsync(border, CancellationToken.None);
+            border.RenderTransform = null;
+        }
     }
 }
