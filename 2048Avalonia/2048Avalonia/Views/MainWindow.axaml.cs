@@ -1,9 +1,16 @@
 using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Styling;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace _2048Avalonia.Views
 {
@@ -19,19 +26,20 @@ namespace _2048Avalonia.Views
 
         private readonly HashSet<(int row, int col)> _slideDestinations = new HashSet<(int, int)>();
         private readonly HashSet<(int row, int col)> _mergeDestinations = new HashSet<(int, int)>();
+
         private readonly Dictionary<int, IBrush> borderColors = new Dictionary<int, IBrush>()
         {
-            { 0, ColorBrush("#FF76D6F0") },
-            { 2, ColorBrush("#FFD2FFFD") },
-            { 4, ColorBrush("#FFF6F9EC") },
-            { 8, ColorBrush("#FFFFE5F0") },
-            { 16, ColorBrush("#FFF3E7FF") },
-            { 32, ColorBrush("#FFCDD9FF") },
-            { 64, ColorBrush("#FFDFFFE2") },
-            { 128, ColorBrush("#FFF7FFBB") },
-            { 256, ColorBrush("#FFFFC5E0") },
-            { 512, ColorBrush("#FF24F9E9") },
-            { 1024, ColorBrush("#FFC883D1")}
+            { 0,    ColorBrush("#FF76D6F0") },
+            { 2,    ColorBrush("#FFD2FFFD") },
+            { 4,    ColorBrush("#FFF6F9EC") },
+            { 8,    ColorBrush("#FFFFE5F0") },
+            { 16,   ColorBrush("#FFF3E7FF") },
+            { 32,   ColorBrush("#FFCDD9FF") },
+            { 64,   ColorBrush("#FFDFFFE2") },
+            { 128,  ColorBrush("#FFF7FFBB") },
+            { 256,  ColorBrush("#FFFFC5E0") },
+            { 512,  ColorBrush("#FF24F9E9") },
+            { 1024, ColorBrush("#FFC883D1") }
         };
 
         private readonly Matrix2048 gameMatrix2048 = new Matrix2048();
@@ -64,9 +72,30 @@ namespace _2048Avalonia.Views
                     _previousMatrix[r, c] = gameMatrix2048.GetValue(r, c);
         }
 
-        public void GameOver()
+        public void GameOver() => gameOverOverlay.IsVisible = true;
+
+        private VisualTile CreateTile(int row, int col, int value)
         {
-            gameOverOverlay.IsVisible = true;
+            var border = new Border
+            {
+                Classes = { "MyBorder" },
+                Width = _cellSize - 6,
+                Height = _cellSize - 6,
+                Background = borderColors.TryGetValue(value, out var brush) ? brush : ColorBrush("#FFF9F9E3"),
+                Child = new TextBlock
+                {
+                    Classes = { "TextBlockStyle" },
+                    Text = value.ToString(),
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    Foreground = value <= 512
+                        ? new SolidColorBrush(Color.Parse("#FF7D78D1"))
+                        : Brushes.White
+        }
+            };
+            Canvas.SetLeft(border, col * _cellSize + 3);
+            Canvas.SetTop(border, row * _cellSize + 3);
+            return new VisualTile { Row = row, Col = col, Value = value, Ui = border };
         }
 
         public void UpdateUI()
