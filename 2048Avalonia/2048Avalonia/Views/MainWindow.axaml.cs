@@ -29,8 +29,9 @@ namespace _2048Avalonia.Views
             { 32, ColorBrush("#FFCDD9FF") },
             { 64, ColorBrush("#FFDFFFE2") },
             { 128, ColorBrush("#FFF7FFBB") },
-            { 256, ColorBrush("#FFFFC3C3") },
-            { 512, ColorBrush("#FF24F9E9") }
+            { 256, ColorBrush("#FFFFC5E0") },
+            { 512, ColorBrush("#FF24F9E9") },
+            { 1024, ColorBrush("#FFC883D1")}
         };
 
         private readonly Matrix2048 gameMatrix2048 = new Matrix2048();
