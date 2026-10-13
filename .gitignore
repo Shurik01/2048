@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Без имени-1.psd
+/2048Avalonia/2048Avalonia.app/Contents
+/2048Avalonia/2048Avalonia.app.zip
+/2048Avalonia/2048Avalonia.slnx

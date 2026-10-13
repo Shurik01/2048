@@ -46,9 +46,12 @@ namespace _2048Avalonia.Views
         private class VisualTile { public int Row, Col, Value; public Border Ui; }
         private readonly List<VisualTile> _activeTiles = new List<VisualTile>();
 
+        private bool _forceClose;
+
         public MainWindow()
         {
             InitializeComponent();
+
 
             KeyDown += Window_KeyDown;
 
@@ -60,6 +63,30 @@ namespace _2048Avalonia.Views
             _bestScore = ScoreFileManager.LoadBestScore();
 
             UpdateUI();
+        }
+
+        protected override async void OnClosing(WindowClosingEventArgs e)
+        {
+            // Если уже подтвердили выход — не мешаем
+            if (_forceClose)
+            {
+                base.OnClosing(e);
+                return;
+            }
+
+            // Отменяем закрытие
+            e.Cancel = true;
+
+            // Показываем диалог
+            var dialog = new CloseWindow();
+            bool result = await dialog.ShowDialog<bool>(this);
+
+            if (result)
+            {
+                _forceClose = true;   // разрешаем реальное закрытие
+                Close();
+            }
+            // если false — просто ничего не делаем, окно остаётся открытым
         }
 
         private static IBrush ColorBrush(string hex) => SolidColorBrush.Parse(hex);
@@ -352,8 +379,8 @@ namespace _2048Avalonia.Views
                         new Setter(ScaleTransform.ScaleYProperty, 1.0)
                     }},
                     new KeyFrame { Cue = new Cue(0.5), Setters = {
-                        new Setter(ScaleTransform.ScaleXProperty, 1.2),
-                        new Setter(ScaleTransform.ScaleYProperty, 1.2)
+                        new Setter(ScaleTransform.ScaleXProperty, 1.1),
+                        new Setter(ScaleTransform.ScaleYProperty, 1.1)
                     }},
                     new KeyFrame { Cue = new Cue(1.0), Setters = {
                         new Setter(ScaleTransform.ScaleXProperty, 1.0),

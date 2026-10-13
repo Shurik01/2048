@@ -8,10 +8,10 @@
         x:DataType="vm:MainViewModel"
         WindowStartupLocation="CenterScreen"
         Width="695" Height="438"
+        MinHeight="438" MinWidth="695"
         Icon="/Assets/Icon.ico"
         Title="StartWindow">
 
-     <Grid>
         <Canvas>
             <Canvas.Background>
                 <!-- Правильный кроссплатформенный путь к картинке -->
@@ -74,5 +74,4 @@
                 </Border.Transitions>
             </Border>
         </Canvas>
-    </Grid>
 </Window>
